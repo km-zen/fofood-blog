@@ -12,7 +12,7 @@ public class AdminDao {
             "admins(first_name, last_name, email, password, superadmin, enable) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String READ_ADMIN_QUERY = "SELECT * FROM admins where id = ?";
     private static final String UPDATE_ADMIN_QUERY = "UPDATE admins SET" +
-            "first_name = ?, last_name = ?, email = ?, password = ?, superadmin = ?, enable = ? where id = ?";
+            " first_name = ?, last_name = ?, email = ?, password = ?, superadmin = ?, enable = ? where id = ?";
     private static final String DELETE_ADMIN_QUERY = "DELETE FROM admins WHERE id = ?";
     private static final String FIND_ALL_ADMINS_QUERY = "SELECT * FROM admins";
 
