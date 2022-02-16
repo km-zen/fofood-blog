@@ -15,13 +15,16 @@ public class Register extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
 
                     //        test pobieranych wartości:
         Map<String, String[]> parameterMap = request.getParameterMap();
         for (String key : parameterMap.keySet()) {
-            response.getWriter().println("key: " + key);
+            response.getWriter().println("key: " + key + "<br>");
             for (String value : parameterMap.get(key)) {
-                response.getWriter().println("value" + value);
+                response.getWriter().println("value " + value+ "<br>");
             }
         }
                     //        koniec testu pobieranych wartości:
