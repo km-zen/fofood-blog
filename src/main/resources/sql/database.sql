@@ -2,7 +2,7 @@
 -- Schema scrumlab
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `scrumlab` DEFAULT CHARACTER SET utf8 ;
-USE `scrumlab` ;
+USE `scrumlab`;
 
 -- -----------------------------------------------------
 -- Table `scrumlab`.`admins`
