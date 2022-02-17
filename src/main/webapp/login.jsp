@@ -55,6 +55,11 @@
             <div class="container w-25">
                 <form action="" method="post" class="padding-small text-center">
                     <h1 class="text-color-darker">Logowanie</h1>
+
+                    <c:if test="${incorrectLoginData== 'true'}">
+                        <h3 class="text-color-lighter">Błędne dane</h3>
+                    </c:if>
+
                     <div class="form-group">
                         <input type="text" class="form-control" id="email" name="email" placeholder="podaj adres email">
                     </div>
