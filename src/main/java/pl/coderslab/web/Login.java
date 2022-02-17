@@ -38,14 +38,11 @@ public class Login extends HttpServlet {
         }
 
         if (validLoginData==true){
-            request.getServletContext().getRequestDispatcher("/home.jsp").forward(request, response);
-
-//            response.sendRedirect("/ok");
+            response.sendRedirect("/");
         } else {
             request.setAttribute("incorrectLoginData", "true");
             doGet(request, response);
         }
-
     }
 
     public boolean checkPassword(String password, String hasched) {
