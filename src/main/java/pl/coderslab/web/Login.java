@@ -33,8 +33,10 @@ public class Login extends HttpServlet {
 
         if(admin!=null && checkPassword(password, admin.getPassword())){
             Cookie cookie = new Cookie("login", "true");
-            cookie.setMaxAge(30 * 24 * 60 * 60);
-            response.addCookie(cookie);
+            HttpSession sess = request.getSession();
+            sess.setAttribute("login", admin.getId());
+//            cookie.setMaxAge(30 * 24 * 60 * 60);
+//            response.addCookie(cookie);
             response.sendRedirect("/");
         } else {
             request.setAttribute("incorrectLoginData", "true");
