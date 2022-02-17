@@ -30,13 +30,18 @@ public class Login extends HttpServlet {
         String password = request.getParameter("password");
 
         Admin admin = adminDao.findByEmail(email);
-        if(admin!=null){
-            if (checkPassword(password, admin.getPassword())){
-                response.sendRedirect("/");
-            } else {
-                request.setAttribute("incorrectLoginData", "true");
-                doGet(request, response);
+
+        Boolean ifValid = false;
+        if(admin!=null && email!=null){
+            if(checkPassword(password, admin.getPassword()) && email.equals(admin.getEmail())){
+                ifValid = true;
             }
+        }
+        if(ifValid){
+            response.sendRedirect("/");
+        } else {
+            request.setAttribute("incorrectLoginData", "true");
+            doGet(request, response);
         }
     }
 
