@@ -31,13 +31,10 @@ public class Login extends HttpServlet {
 
         Admin admin = adminDao.findByEmail(email);
 
-        Boolean ifValid = false;
-        if(admin!=null && email!=null){
-            if(checkPassword(password, admin.getPassword()) && email.equals(admin.getEmail())){
-                ifValid = true;
-            }
-        }
-        if(ifValid){
+        if(admin!=null && checkPassword(password, admin.getPassword())){
+            Cookie cookie = new Cookie("login", "true");
+            cookie.setMaxAge(30 * 24 * 60 * 60);
+            response.addCookie(cookie);
             response.sendRedirect("/");
         } else {
             request.setAttribute("incorrectLoginData", "true");
