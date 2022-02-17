@@ -1,15 +1,21 @@
 package pl.coderslab.web;
 
+import org.mindrot.jbcrypt.BCrypt;
+import pl.coderslab.dao.AdminDao;
+import pl.coderslab.model.Admin;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.util.Map;
 
 @WebServlet("/login")
 public class Login extends HttpServlet {
+    AdminDao adminDao = new AdminDao();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         request.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
@@ -20,15 +26,26 @@ public class Login extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        //        test pobieranych wartości:
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        for (String key : parameterMap.keySet()) {
-            response.getWriter().println("key: " + key + "<br>");
-            for (String value : parameterMap.get(key)) {
-                response.getWriter().println("value " + value+ "<br>");
-            }
-        }
-        //        koniec testu pobieranych wartości:
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
+        Admin admin = adminDao.findByEmail(email);
+
+        if(admin!=null && checkPassword(password, admin.getPassword())){
+            Cookie cookie = new Cookie("login", "true");
+            HttpSession sess = request.getSession();
+            sess.setAttribute("login", admin.getId());
+//            cookie.setMaxAge(30 * 24 * 60 * 60);
+//            response.addCookie(cookie);
+            response.sendRedirect("/");
+        } else {
+            request.setAttribute("incorrectLoginData", "true");
+            doGet(request, response);
+        }
     }
+
+    public boolean checkPassword(String password, String hasched) {
+        return BCrypt.checkpw(password, hasched);
+    }
+
 }

@@ -15,6 +15,7 @@ public class AdminDao {
             " first_name = ?, last_name = ?, email = ?, password = ?, superadmin = ?, enable = ? where id = ?";
     private static final String DELETE_ADMIN_QUERY = "DELETE FROM admins WHERE id = ?";
     private static final String FIND_ALL_ADMINS_QUERY = "SELECT * FROM admins";
+    private static final String FIND_BY_EMAIL = "SELECT * FROM admins WHERE email = ? ;";
 
     public String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
@@ -66,6 +67,28 @@ public class AdminDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Admin findByEmail(String email){
+        try (Connection conn = DbUtil.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(FIND_BY_EMAIL);
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Admin admin = new Admin();
+                admin.setId(resultSet.getInt("id"));
+                admin.setFirstName(resultSet.getString("first_name"));
+                admin.setLastName(resultSet.getString("last_name"));
+                admin.setEmail(resultSet.getString("email"));
+                admin.setPassword(resultSet.getString("password"));
+                admin.setSuperadmin(resultSet.getInt("superadmin"));
+                admin.setEnable(resultSet.getInt("enable"));
+                return admin;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Admin read(int adminId) {
