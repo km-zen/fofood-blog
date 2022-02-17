@@ -30,7 +30,7 @@
                 <a class="nav-link color-header" href="/login">logowanie</a>
             </li>
             <li class="nav-item ml-4">
-                <a class="nav-link color-header" href="registration.html">rejestracja</a>
+                <a class="nav-link color-header" href="/register">rejestracja</a>
             </li>
             <li class="nav-item ml-4">
                 <a class="nav-link" href="/about">o aplikacji</a>
