@@ -39,8 +39,6 @@ public class RecipeDao {
                     recipe.setPreparation_time(resultSet.getInt("preparation_time"));
                     recipe.setPreparation(resultSet.getString("preparation"));
                     recipe.setAdmin_id(resultSet.getInt("admin_id"));
-
-
                 }
             }
         } catch (Exception e) {
@@ -68,6 +66,7 @@ public class RecipeDao {
                 recipeToAdd.setPreparation_time(resultSet.getInt("preparation_time"));
                 recipeToAdd.setPreparation(resultSet.getString("preparation"));
                 recipeToAdd.setAdmin_id(resultSet.getInt("admin_id"));
+                recipeList.add(recipeToAdd);
             }
 
         } catch (SQLException e) {
@@ -103,7 +102,6 @@ public class RecipeDao {
                 } else {
                     throw new RuntimeException("Generated key was not found");
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,15 +115,11 @@ public class RecipeDao {
              PreparedStatement statement = connection.prepareStatement(DELETE_RECIPE_QUERY)) {
             statement.setInt(1, recipeId);
             statement.executeUpdate();
-
-            boolean deleted = statement.execute();
-            if (!deleted) {
-                throw new NotFoundException("Product not found");
-            }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    
     public void update(Recipe recipe) {
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_RECIPE_QUERY)) {
@@ -143,6 +137,5 @@ public class RecipeDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
