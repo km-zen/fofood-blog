@@ -2,6 +2,7 @@ package pl.coderslab.web;
 
 import org.mindrot.jbcrypt.BCrypt;
 import pl.coderslab.dao.AdminDao;
+import pl.coderslab.dao.RecipeDao;
 import pl.coderslab.model.Admin;
 
 import javax.servlet.*;
@@ -33,8 +34,10 @@ public class Login extends HttpServlet {
 
         if(admin!=null && checkPassword(password, admin.getPassword())){
             Cookie cookie = new Cookie("login", "true");
+            RecipeDao recipeDao = new RecipeDao();
             HttpSession sess = request.getSession();
             sess.setAttribute("login", admin.getId());
+            sess.setAttribute("recipesCount", recipeDao.recipesCount(admin));
 //            cookie.setMaxAge(30 * 24 * 60 * 60);
 //            response.addCookie(cookie);
             response.sendRedirect("/");
