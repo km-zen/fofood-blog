@@ -1,6 +1,7 @@
 package pl.coderslab.dao;
 
 import pl.coderslab.exception.NotFoundException;
+import pl.coderslab.model.Admin;
 import pl.coderslab.model.Plan;
 import pl.coderslab.utils.DbUtil;
 import java.sql.Connection;
@@ -18,6 +19,7 @@ public class PlanDao {
     private static final String FIND_ALL_PLANS_QUERY = "SELECT * FROM plan;";
     private static final String DELETE_PLAN_QUERY = "DELETE FROM plan where id = ?;";
     private static final String UPDATE_PLAN_QUERY = "UPDATE	plan SET name = ? , description = ?, created = ?, admin_id = ? WHERE	id = ?;";
+    private static final String PLAN_COUNT_QUERY = "SELECT id FROM plan where admin_id = ?;";
 
     public Plan create(Plan plan) {
         try (Connection connection = DbUtil.getConnection();
@@ -121,7 +123,23 @@ public class PlanDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
+
+    public int planCount(Admin admin) {
+        int counter = 0;
+        try (Connection connection = DbUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(PLAN_COUNT_QUERY)
+        ) {
+            statement.setInt(1, admin.getId());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    counter++;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return counter;
+    };
 
 }
