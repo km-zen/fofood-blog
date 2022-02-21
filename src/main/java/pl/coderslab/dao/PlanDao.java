@@ -8,8 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +18,12 @@ public class PlanDao {
     private static final String DELETE_PLAN_QUERY = "DELETE FROM plan where id = ?;";
     private static final String UPDATE_PLAN_QUERY = "UPDATE	plan SET name = ? , description = ?, created = ?, admin_id = ? WHERE	id = ?;";
     private static final String PLAN_COUNT_QUERY = "SELECT id FROM plan where admin_id = ?;";
-
+    private static final String LAST_PLAN_QUERY = "SELECT day_name.name as day_name, meal_name,  recipe.name as recipe_name, recipe.description as recipe_description\n" +
+            "FROM `recipe_plan`\n" +
+            "JOIN day_name on day_name.id=day_name_id\n" +
+            "JOIN recipe on recipe.id=recipe_id WHERE\n" +
+            "recipe_plan.plan_id =  (SELECT MAX(id) from plan WHERE admin_id = ?) \n" +
+            "ORDER by day_name.display_order, recipe_plan.display_order;";
     public Plan create(Plan plan) {
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement insertStm = connection.prepareStatement(CREATE_PLAN_QUERY,
@@ -140,6 +143,28 @@ public class PlanDao {
             e.printStackTrace();
         }
         return counter;
-    };
+    }
+
+    public List<String> lastPlan(int adminId) {
+     List<String> recipe_plan = new ArrayList<>();
+        try (Connection connection = DbUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(LAST_PLAN_QUERY)) {
+            statement.setInt(1, adminId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+
+                    recipe_plan.add(resultSet.getString("day_name"));
+                    recipe_plan.add(resultSet.getString("meal_name"));
+                    recipe_plan.add(resultSet.getString("recipe_name"));
+                    recipe_plan.add(resultSet.getString("recipe_description"));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recipe_plan;
+    }
+
 
 }
