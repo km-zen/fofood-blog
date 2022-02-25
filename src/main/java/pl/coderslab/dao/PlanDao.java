@@ -2,6 +2,7 @@ package pl.coderslab.dao;
 
 import pl.coderslab.exception.NotFoundException;
 import pl.coderslab.model.Admin;
+import pl.coderslab.model.LastPlan;
 import pl.coderslab.model.Plan;
 import pl.coderslab.utils.DbUtil;
 import java.sql.Connection;
@@ -145,18 +146,18 @@ public class PlanDao {
         return counter;
     }
 
-    public List<String> lastPlan(int adminId) {
-     List<String> recipe_plan = new ArrayList<>();
+    public LastPlan lastPlanPrint(int adminId) {
+        LastPlan recipe_plan = new LastPlan();
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(LAST_PLAN_QUERY)) {
             statement.setInt(1, adminId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
 
-                    recipe_plan.add(resultSet.getString("day_name"));
-                    recipe_plan.add(resultSet.getString("meal_name"));
-                    recipe_plan.add(resultSet.getString("recipe_name"));
-                    recipe_plan.add(resultSet.getString("recipe_description"));
+                    recipe_plan.setDay_name(resultSet.getString("day_name"));
+                    recipe_plan.setMeal_name(resultSet.getString("meal_name"));
+                    recipe_plan.setRecipe_name(resultSet.getString("recipe_name"));
+                    recipe_plan.setRecipe_description(resultSet.getString("recipe_description"));
                 }
             }
 
