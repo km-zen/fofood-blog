@@ -20,6 +20,7 @@
 </head>
 
 <body>
+<h1> Testowy nagłówek</h1>
 <header class="page-header">
     <nav class="navbar navbar-expand-lg justify-content-around">
         <a href="/" class="navbar-brand main-logo">
